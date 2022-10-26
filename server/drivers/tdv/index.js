@@ -122,8 +122,8 @@ function getSchema(connection) {
   );
 }
 
-function getConnection_string(database, host, domain) {
-  return 'Driver=' + odbc_driver_path + ";host=" + host + ";datasource=" + database + ";domain=" + domain;
+function getConnection_string(database, host, port, domain) {
+  return 'Driver=' + odbc_driver_path + ";host=" + host + ";port=" + port + ";datasource=" + database + ";domain=" + domain;
 }
 
 class Client {
@@ -140,8 +140,8 @@ class Client {
     const { username, password } = this.connection;
     let domain =  this.connection.domain ?  this.connection.domain : 'composite';
     let host = this.connection.host ? this.connection.host: 'localhost';
-    const connection_string = getConnection_string( this.connection.database,  host,  domain);
-    console.log("Check Conn : " + connection_string)
+    let port = this.connection.port ? this.connection.port: 9401;
+    const connection_string = getConnection_string(this.connection.database, host, port, domain);
     let cn = connection_string;
 
     // Not all drivers require auth
@@ -255,6 +255,11 @@ const fields = [
     key: 'host',
     formType: 'TEXT',
     label: 'Host/Server/IP Address',
+  },
+  {
+    key: 'port',
+    formType: 'TEXT',
+    label: 'Port (optional)',
   },
   {
     key: 'domain',
