@@ -17,29 +17,28 @@ function getDriverPath(){
   const archtype = process.arch
 
   if (platform == "win32") {
-      if (archtype == 'x64') {
-          return  driver_base_path + 'win' + path.sep + window_odbc_filename.replace('{archtype}', '_x64');
-      }
-      else {
-          return  driver_base_path + 'win' + path.sep + window_odbc_filename.replace('{archtype}', '');
-      }
+    if (archtype == 'x64') {
+        return  driver_base_path + 'win' + path.sep + window_odbc_filename.replace('{archtype}', '_x64');
+     }
+     else {
+       return  driver_base_path + 'win' + path.sep + window_odbc_filename.replace('{archtype}', '');
+     }
   }
   else {
-      let buffer_platform = '';
-      if (platform != 'linux' &&  platform != 'alx') {
-          buffer_platform = 'linux/';
-      } else {
-          buffer_platform = platform + path.sep;
-      }
+    let buffer_platform = '';
+    if (platform != 'linux' &&  platform != 'alx') {
+        buffer_platform = 'linux/';
+    } else {
+        buffer_platform = platform + path.sep;
+    }
 
-      if (archtype == 'x64') {
-          return  driver_base_path + buffer_platform + other_odbc_filename.replace('{archtype}', '_x64');
-      }
-      else {
-          return  driver_base_path + buffer_platform + other_odbc_filename.replace('{archtype}', '');
-      }
+    if (archtype == 'x64') {
+        return  driver_base_path + buffer_platform + other_odbc_filename.replace('{archtype}', '_x64');
+    }
+    else {
+        return  driver_base_path + buffer_platform + other_odbc_filename.replace('{archtype}', '');
+     }
   }
-  
 }
 
 function getTDVSchemaSql(database) {
@@ -192,10 +191,12 @@ class Client {
 
     let cleanedQuery = query;
     const strategies = cleanAndValidateLimitStrategies(limit_strategies);
-
-    if (strategies.length) {
+    
+    if (!cleanedQuery.includes("/services/databases/system/ALL_COLUMNS") && strategies.length) {
       cleanedQuery = sqlLimiter.limit(query, strategies, maxRows + 1);
     }
+
+    appLog.info(cleanedQuery, "Check SQL")
 
     try {
       let incomplete = false;
