@@ -288,6 +288,7 @@ const fields = [
 module.exports = {
   Client,
   fields,
+  getSchema,
   id,
   name,
   runQuery,
