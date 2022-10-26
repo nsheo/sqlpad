@@ -182,7 +182,7 @@ class Client {
   }
 
   async runQuery(query) {
-    const limit_strategies= '<code>fetch</code>';
+    const limit_strategies= 'fetch';
 
     // Check to see if a custom maxrows is set, otherwise use default
     const maxRows = resolvePositiveNumber(
