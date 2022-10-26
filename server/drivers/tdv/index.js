@@ -189,10 +189,16 @@ class Client {
       this.connection.maxRows
     );
 
+    appLog.info(maxRows, "Check maxRows")
+
     let cleanedQuery = query;
     const strategies = cleanAndValidateLimitStrategies(limit_strategies);
+    let checkMaxRows = true;
+    if(cleanedQuery.includes("/services/databases/system/ALL_COLUMNS")) {
+      checkMaxRows = false;
+    }
     
-    if (!cleanedQuery.includes("/services/databases/system/ALL_COLUMNS") && strategies.length) {
+    if (checkMaxRows && strategies.length) {
       cleanedQuery = sqlLimiter.limit(query, strategies, maxRows + 1);
     }
 
@@ -221,7 +227,7 @@ class Client {
       if (columns && columns.length > 0) {
         // iterate over queryResult, which is also an array of rows
         for (const row of queryResult) {
-          if (maxRows) {
+          if (checkMaxRows && maxRows) {
             if (rows.length < maxRows) {
               rows.push(row);
             } else {
