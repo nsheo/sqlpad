@@ -42,22 +42,20 @@ function getDriverPath(){
   
 }
 
-
 function getTDVSchemaSql(database) {
   return `
     SELECT 
-      c.table_schema, 
-      c.table_name, 
-      c.column_name, 
-      c.data_type
-    FROM 
-      INFORMATION_SCHEMA.COLUMNS c
+       schema_name AS table_schema, 
+       table_name AS table_name, 
+       column_name AS column_name, 
+       data_type AS data_type
+    FROM /services/databases/system/ALL_COLUMNS
     WHERE
-      table_catalog = '${database}'
+       DATASOURCE_NAME = '${database}'
     ORDER BY 
-      c.table_schema, 
-      c.table_name, 
-      c.ordinal_position
+      table_schema, 
+      table_name, 
+      ordinal_position
   `;
 }
 
@@ -140,9 +138,10 @@ class Client {
     }
 
     const { username, password } = this.connection;
-    const connection_string = getConnection_string(connection.database, connection.host, connection.domain);
-
-
+    let domain =  this.connection.domain ?  this.connection.domain : 'composite';
+    let host = this.connection.host ? this.connection.host: 'localhost';
+    const connection_string = getConnection_string( this.connection.database,  host,  domain);
+    console.log("Check Conn : " + connection_string)
     let cn = connection_string;
 
     // Not all drivers require auth
@@ -260,7 +259,7 @@ const fields = [
   {
     key: 'domain',
     formType: 'TEXT',
-    label: 'Domain (optional)',
+    label: 'Domain',
   },
   {
     key: 'database',
