@@ -20,6 +20,7 @@ const drivers = {
   sqlserver: require('./sqlserver'),
   trino: require('./trino'),
   vertica: require('./vertica'),
+  tdv: require('./tdv'),
 };
 
 // unixodbc is an optional dependency due to it needing to be compiled
