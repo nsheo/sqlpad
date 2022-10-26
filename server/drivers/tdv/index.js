@@ -1,4 +1,4 @@
-const odbc = require('odbc');
+const tdv = require('odbc');
 const appLog = require('../../lib/app-log');
 const sqlLimiter = require('sql-limiter');
 const { formatSchemaQueryResults } = require('../utils');
@@ -154,7 +154,7 @@ class Client {
     }
 
     try {
-      this.client = await odbc.connect(cn);
+      this.client = await tdv.connect(cn);
     } catch (error) {
       // unixodb error has additional info about why the error occurred
       // It has an array of objects with messages.
