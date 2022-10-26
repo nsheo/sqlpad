@@ -286,10 +286,10 @@ const fields = [
 ];
 
 module.exports = {
+  Client,
+  fields,
   id,
   name,
-  fields,
-  getSchema,
   runQuery,
   testConnection,
 };
